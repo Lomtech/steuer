@@ -148,6 +148,22 @@
                         </p>
                     </div>
                 </div>
+
+                <div class="csv-bar">
+                    <div class="csv-bar__info">
+                        <span class="csv-bar__label">CSV-Schnittstelle</span>
+                        <span class="csv-bar__hint">Format: Semikolon-getrennt, Komma als Dezimaltrennzeichen
+                            (Excel-DE)</span>
+                    </div>
+                    <div class="csv-bar__actions">
+                        <button class="btn-ghost" type="button" data-csv-template="spheres">Vorlage laden</button>
+                        <label class="btn-ghost btn-ghost--file">
+                            Import
+                            <input type="file" accept=".csv,text/csv" data-csv-import="spheres" hidden />
+                        </label>
+                        <button class="btn-ghost" type="button" data-csv-export="spheres">Export</button>
+                    </div>
+                </div>
             </section>
 
             <!-- ============ 02 STEUERN ============ -->
@@ -282,6 +298,16 @@
                         <output data-tax="effective-rate">0,0 %</output>
                     </div>
                 </div>
+
+                <div class="csv-bar">
+                    <div class="csv-bar__info">
+                        <span class="csv-bar__label">Steuerberechnung exportieren</span>
+                        <span class="csv-bar__hint">KSt · GewSt · USt-Zusammenstellung für Akte / Mandant</span>
+                    </div>
+                    <div class="csv-bar__actions">
+                        <button class="btn-ghost" type="button" data-csv-export="taxes">Export</button>
+                    </div>
+                </div>
             </section>
 
             <!-- ============ 03 MITTELVERWENDUNG ============ -->
@@ -367,6 +393,21 @@
                         </div>
                     </article>
                 </div>
+
+                <div class="csv-bar">
+                    <div class="csv-bar__info">
+                        <span class="csv-bar__label">CSV-Schnittstelle</span>
+                        <span class="csv-bar__hint">Zuflüsse, Verwendung und Rücklagen im- und exportieren</span>
+                    </div>
+                    <div class="csv-bar__actions">
+                        <button class="btn-ghost" type="button" data-csv-template="reserves">Vorlage laden</button>
+                        <label class="btn-ghost btn-ghost--file">
+                            Import
+                            <input type="file" accept=".csv,text/csv" data-csv-import="reserves" hidden />
+                        </label>
+                        <button class="btn-ghost" type="button" data-csv-export="reserves">Export</button>
+                    </div>
+                </div>
             </section>
 
             <!-- ============ 04 ZUWENDUNGSBESTÄTIGUNG ============ -->
@@ -446,6 +487,16 @@
             </section>
 
         </main>
+
+        <div class="csv-bar" style="margin-top: 48px;">
+            <div class="csv-bar__info">
+                <span class="csv-bar__label">Gesamt-Export</span>
+                <span class="csv-bar__hint">Konsolidierte Mandantenakte: alle Module als eine CSV</span>
+            </div>
+            <div class="csv-bar__actions">
+                <button class="btn-ghost" type="button" data-csv-export="all">Alle Daten exportieren</button>
+            </div>
+        </div>
 
         <footer class="footnote">
             <p>
