@@ -3,512 +3,100 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stiftungssteuer — Kanzlei-Rechner</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet" />
+    <title>Stiftungssteuer Tool</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-    <div class="page">
-        <header class="masthead">
-            <div class="masthead__brand">
-                <span class="masthead__mark">§</span>
+
+    <header>
+        <h1>Stiftungssteuer Tool</h1>
+    </header>
+
+    <main>
+
+        <!-- ================= Sphären ================= -->
+        <section class="card">
+            <h2>Sphären (für KSt / GewSt)</h2>
+
+            <div class="grid">
                 <div>
-                    <h1 class="masthead__title">Stiftungssteuer</h1>
-                    <p class="masthead__sub">Berechnungsmappe für gemeinnützige Stiftungen · VZ 2026</p>
+                    <label>Ideell Einnahmen</label>
+                    <input id="ideal-in" type="number" />
+                </div>
+                <div>
+                    <label>Ideell Ausgaben</label>
+                    <input id="ideal-out" type="number" />
+                </div>
+
+                <div>
+                    <label>Vermögensverwaltung Einnahmen</label>
+                    <input id="asset-in" type="number" />
+                </div>
+                <div>
+                    <label>Vermögensverwaltung Ausgaben</label>
+                    <input id="asset-out" type="number" />
+                </div>
+
+                <div>
+                    <label>Zweckbetrieb Einnahmen</label>
+                    <input id="purpose-in" type="number" />
+                </div>
+                <div>
+                    <label>Zweckbetrieb Ausgaben</label>
+                    <input id="purpose-out" type="number" />
+                </div>
+
+                <div>
+                    <label>wGB Einnahmen (Brutto!)</label>
+                    <input id="biz-in" type="number" />
+                </div>
+                <div>
+                    <label>wGB Ausgaben</label>
+                    <input id="biz-out" type="number" />
                 </div>
             </div>
-            <div class="masthead__meta">
-                <span class="save-indicator" id="save-indicator">Automatisch gespeichert</span>
-                <span class="badge">Kanzlei-Modul</span>
-                <button class="btn-ghost" id="btn-export-all" type="button">Drucken</button>
-                <button class="btn-ghost" id="btn-reset-all" type="button">Zurücksetzen</button>
+        </section>
+
+        <!-- ================= Leistungen ================= -->
+        <section class="card">
+            <h2>Leistungen (für Umsatzsteuer)</h2>
+
+            <div id="services"></div>
+
+            <button id="add-service">+ Leistung hinzufügen</button>
+
+            <div class="row">
+                <label>Vorjahresumsatz (€)</label>
+                <input id="prev-year" type="number" />
             </div>
-        </header>
 
-        <nav class="tabs" role="tablist">
-            <button class="tab is-active" data-tab="spheres" role="tab">01 — Sphärenrechnung</button>
-            <button class="tab" data-tab="taxes" role="tab">02 — KSt · GewSt · USt</button>
-            <button class="tab" data-tab="reserves" role="tab">03 — Mittelverwendung</button>
-            <button class="tab" data-tab="donations" role="tab">04 — Zuwendungsbestätigung</button>
-        </nav>
+            <label>
+                <input type="checkbox" id="klein" />
+                Kleinunternehmer anwenden
+            </label>
+        </section>
 
-        <main class="content">
+        <!-- ================= Steuer ================= -->
+        <section class="card">
+            <h2>Steuern</h2>
 
-            <!-- ============ 01 SPHÄRENRECHNUNG ============ -->
-            <section class="panel is-active" data-panel="spheres">
-                <div class="panel__intro">
-                    <h2 class="panel__title">Sphärenrechnung</h2>
-                    <p class="panel__lede">
-                        Zuordnung der Einnahmen und Ausgaben zu den vier steuerlichen Sphären gemäß
-                        <em>§§ 14, 64–68 AO</em>. Die Freigrenze nach § 64 Abs. 3 AO wird automatisch geprüft.
-                    </p>
-                </div>
-
-                <div class="spheres-grid">
-                    <article class="sphere sphere--ideal">
-                        <header class="sphere__head">
-                            <span class="sphere__num">01</span>
-                            <div>
-                                <h3>Ideeller Bereich</h3>
-                                <p>Steuerfrei · nicht steuerbar (USt)</p>
-                            </div>
-                        </header>
-                        <div class="sphere__rows">
-                            <label>Spenden, Mitgliedsbeiträge, Zuschüsse
-                                <input type="number" data-sphere="ideal" data-kind="in" placeholder="0,00" />
-                            </label>
-                            <label>Aufwand (direkt zuordenbar)
-                                <input type="number" data-sphere="ideal" data-kind="out" placeholder="0,00" />
-                            </label>
-                        </div>
-                        <div class="sphere__result">
-                            <span>Saldo</span>
-                            <output data-sphere-result="ideal">0,00 €</output>
-                        </div>
-                    </article>
-
-                    <article class="sphere sphere--asset">
-                        <header class="sphere__head">
-                            <span class="sphere__num">02</span>
-                            <div>
-                                <h3>Vermögensverwaltung</h3>
-                                <p>KSt/GewSt-frei · USt 7 %</p>
-                            </div>
-                        </header>
-                        <div class="sphere__rows">
-                            <label>Zinsen, Mieten, Dividenden, Lizenzen
-                                <input type="number" data-sphere="asset" data-kind="in" placeholder="0,00" />
-                            </label>
-                            <label>Aufwand (Verwaltung, AfA, Zinsen)
-                                <input type="number" data-sphere="asset" data-kind="out" placeholder="0,00" />
-                            </label>
-                        </div>
-                        <div class="sphere__result">
-                            <span>Saldo</span>
-                            <output data-sphere-result="asset">0,00 €</output>
-                        </div>
-                    </article>
-
-                    <article class="sphere sphere--purpose">
-                        <header class="sphere__head">
-                            <span class="sphere__num">03</span>
-                            <div>
-                                <h3>Zweckbetrieb</h3>
-                                <p>Begünstigt · USt 7 % (§ 12 II Nr. 8a)</p>
-                            </div>
-                        </header>
-                        <div class="sphere__rows">
-                            <label>Einnahmen aus Zweckbetrieb (§§ 65–68 AO)
-                                <input type="number" data-sphere="purpose" data-kind="in" placeholder="0,00" />
-                            </label>
-                            <label>Betriebsausgaben Zweckbetrieb
-                                <input type="number" data-sphere="purpose" data-kind="out" placeholder="0,00" />
-                            </label>
-                        </div>
-                        <div class="sphere__result">
-                            <span>Saldo</span>
-                            <output data-sphere-result="purpose">0,00 €</output>
-                        </div>
-                    </article>
-
-                    <article class="sphere sphere--biz">
-                        <header class="sphere__head">
-                            <span class="sphere__num">04</span>
-                            <div>
-                                <h3>Wirtschaftl. Geschäftsbetrieb</h3>
-                                <p>Voll steuerpflichtig · USt 19 %</p>
-                            </div>
-                        </header>
-                        <div class="sphere__rows">
-                            <label>Bruttoeinnahmen wGB (inkl. USt)
-                                <input type="number" data-sphere="biz" data-kind="in" placeholder="0,00" />
-                            </label>
-                            <label>Betriebsausgaben wGB
-                                <input type="number" data-sphere="biz" data-kind="out" placeholder="0,00" />
-                            </label>
-                        </div>
-                        <div class="sphere__result">
-                            <span>Gewinn wGB</span>
-                            <output data-sphere-result="biz">0,00 €</output>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="callout" id="freigrenze-box">
-                    <div class="callout__icon">§ 64 III</div>
-                    <div class="callout__body">
-                        <h4>Freigrenze § 64 Abs. 3 AO</h4>
-                        <p id="freigrenze-text">
-                            Bruttoeinnahmen aus wGB: <strong data-freigrenze-value>0,00 €</strong>
-                            — Schwellenwert 50.000 €. Bitte Einnahmen erfassen.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="csv-bar">
-                    <div class="csv-bar__info">
-                        <span class="csv-bar__label">CSV-Schnittstelle</span>
-                        <span class="csv-bar__hint">Format: Semikolon-getrennt, Komma als Dezimaltrennzeichen
-                            (Excel-DE)</span>
-                    </div>
-                    <div class="csv-bar__actions">
-                        <button class="btn-ghost" type="button" data-csv-template="spheres">Vorlage laden</button>
-                        <label class="btn-ghost btn-ghost--file">
-                            Import
-                            <input type="file" accept=".csv,text/csv" data-csv-import="spheres" hidden />
-                        </label>
-                        <button class="btn-ghost" type="button" data-csv-export="spheres">Export</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============ 02 STEUERN ============ -->
-            <section class="panel" data-panel="taxes">
-                <div class="panel__intro">
-                    <h2 class="panel__title">Körperschaft-, Gewerbe- und Umsatzsteuer</h2>
-                    <p class="panel__lede">
-                        Berechnet auf Basis der Sphärenrechnung. Hebesatz der sitzenden Gemeinde wird manuell
-                        eingegeben.
-                    </p>
-                </div>
-
-                <div class="tax-grid">
-                    <article class="card">
-                        <h3 class="card__title">Körperschaftsteuer</h3>
-                        <div class="card__io">
-                            <div class="io-row">
-                                <span>Gewinn wGB (aus 01)</span>
-                                <output data-tax="profit">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <span>./. Freibetrag § 24 KStG</span>
-                                <output data-tax="kst-freibetrag">5.000,00 €</output>
-                            </div>
-                            <div class="io-row io-row--sum">
-                                <span>Bemessungsgrundlage</span>
-                                <output data-tax="kst-base">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <span>KSt 15 %</span>
-                                <output data-tax="kst">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <span>Soli 5,5 %</span>
-                                <output data-tax="soli">0,00 €</output>
-                            </div>
-                            <div class="io-row io-row--total">
-                                <span>Summe KSt + Soli</span>
-                                <output data-tax="kst-total">0,00 €</output>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card">
-                        <h3 class="card__title">Gewerbesteuer</h3>
-                        <div class="card__io">
-                            <div class="io-row">
-                                <span>Gewerbeertrag</span>
-                                <output data-tax="gew-profit">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <span>./. Freibetrag § 11 GewStG</span>
-                                <output>5.000,00 €</output>
-                            </div>
-                            <div class="io-row io-row--sum">
-                                <span>Bemessungsgrundlage</span>
-                                <output data-tax="gew-base">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <span>Steuermessbetrag (× 3,5 %)</span>
-                                <output data-tax="gew-messbetrag">0,00 €</output>
-                            </div>
-                            <div class="io-row">
-                                <label class="inline-label">Hebesatz (%)
-                                    <input type="number" id="hebesatz" value="400" min="200" max="900" />
-                                </label>
-                            </div>
-                            <div class="io-row io-row--total">
-                                <span>Gewerbesteuer</span>
-                                <output data-tax="gew-total">0,00 €</output>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card card--wide">
-                        <h3 class="card__title">Umsatzsteuer</h3>
-                        <div class="ust-table">
-                            <div class="ust-head">
-                                <span>Sphäre</span><span>Netto</span><span>Satz</span><span>USt</span><span>Brutto</span>
-                            </div>
-
-                            <div class="ust-row">
-                                <span>Vermögensverwaltung</span>
-                                <output data-ust="asset-net">0,00 €</output>
-                                <span>7 %</span>
-                                <output data-ust="asset-tax">0,00 €</output>
-                                <output data-ust="asset-gross">0,00 €</output>
-                            </div>
-                            <div class="ust-row">
-                                <span>Zweckbetrieb</span>
-                                <output data-ust="purpose-net">0,00 €</output>
-                                <span>7 %</span>
-                                <output data-ust="purpose-tax">0,00 €</output>
-                                <output data-ust="purpose-gross">0,00 €</output>
-                            </div>
-                            <div class="ust-row">
-                                <span>Wirtschaftl. Geschäftsbetrieb</span>
-                                <output data-ust="biz-net">0,00 €</output>
-                                <span>19 %</span>
-                                <output data-ust="biz-tax">0,00 €</output>
-                                <output data-ust="biz-gross">0,00 €</output>
-                            </div>
-                            <div class="ust-row ust-row--total">
-                                <span>Summe USt</span>
-                                <output data-ust="total-net">0,00 €</output>
-                                <span>—</span>
-                                <output data-ust="total-tax">0,00 €</output>
-                                <output data-ust="total-gross">0,00 €</output>
-                            </div>
-                        </div>
-
-                        <div class="kleinunternehmer">
-                            <label class="switch">
-                                <input type="checkbox" id="kleinunternehmer" />
-                                <span>Kleinunternehmer § 19 UStG anwenden</span>
-                            </label>
-                            <p class="switch__hint" id="kleinunternehmer-hint">
-                                Prüfung gegen 25.000 € (Vorjahr) / 100.000 € (laufend). Bei Aktivierung keine
-                                USt-Erhebung.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="summary-bar">
-                    <div>
-                        <span>Steuerlast gesamt</span>
-                        <output data-tax="grand-total">0,00 €</output>
-                    </div>
-                    <div>
-                        <span>Effektive Steuerquote (wGB)</span>
-                        <output data-tax="effective-rate">0,0 %</output>
-                    </div>
-                </div>
-
-                <div class="csv-bar">
-                    <div class="csv-bar__info">
-                        <span class="csv-bar__label">Steuerberechnung exportieren</span>
-                        <span class="csv-bar__hint">KSt · GewSt · USt-Zusammenstellung für Akte / Mandant</span>
-                    </div>
-                    <div class="csv-bar__actions">
-                        <button class="btn-ghost" type="button" data-csv-export="taxes">Export</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============ 03 MITTELVERWENDUNG ============ -->
-            <section class="panel" data-panel="reserves">
-                <div class="panel__intro">
-                    <h2 class="panel__title">Mittelverwendung & Rücklagen</h2>
-                    <p class="panel__lede">
-                        Prüfung der zeitnahen Mittelverwendung nach <em>§ 55 Abs. 1 Nr. 5 AO</em> sowie Rücklagenbildung
-                        gemäß <em>§ 62 AO</em>. Zufluss im Jahr X ist bis Ende Jahr X+2 zu verwenden.
-                    </p>
-                </div>
-
-                <div class="reserves-grid">
-                    <article class="card">
-                        <h3 class="card__title">Mittelzuflüsse</h3>
-                        <div class="card__io">
-                            <div class="io-row">
-                                <label class="inline-label">Zufluss Vorjahr
-                                    <input type="number" id="zufluss-vorjahr" placeholder="0,00" />
-                                </label>
-                            </div>
-                            <div class="io-row">
-                                <label class="inline-label">Zufluss laufendes Jahr
-                                    <input type="number" id="zufluss-laufend" placeholder="0,00" />
-                                </label>
-                            </div>
-                            <div class="io-row io-row--sum">
-                                <span>Summe zeitnah zu verwenden</span>
-                                <output id="zufluss-sum">0,00 €</output>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card">
-                        <h3 class="card__title">Mittelverwendung</h3>
-                        <div class="card__io">
-                            <div class="io-row">
-                                <label class="inline-label">Satzungsmäßig verwendet
-                                    <input type="number" id="verwendet" placeholder="0,00" />
-                                </label>
-                            </div>
-                            <div class="io-row">
-                                <label class="inline-label">Freie Rücklage § 62 I Nr. 3
-                                    <input type="number" id="ruecklage-frei" placeholder="0,00" />
-                                </label>
-                            </div>
-                            <div class="io-row">
-                                <label class="inline-label">Zweckgeb. Rücklage § 62 I Nr. 1
-                                    <input type="number" id="ruecklage-zweck" placeholder="0,00" />
-                                </label>
-                            </div>
-                            <div class="io-row">
-                                <label class="inline-label">Wiederbeschaffung § 62 I Nr. 2
-                                    <input type="number" id="ruecklage-wbr" placeholder="0,00" />
-                                </label>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="card card--wide">
-                        <h3 class="card__title">Prüfungsergebnis</h3>
-                        <div class="check-list" id="check-list">
-                            <div class="check check--pending" data-check="freie">
-                                <span class="check__dot"></span>
-                                <div>
-                                    <strong>Freie Rücklage § 62 I Nr. 3</strong>
-                                    <p>Max. 1/3 des Überschusses aus Vermögensverwaltung <em>plus</em> 10 % der sonst.
-                                        zeitnah zu verwendenden Mittel.</p>
-                                    <p class="check__detail" data-detail="freie">Höchstbetrag: <strong>0,00 €</strong> ·
-                                        Gebildet: <strong>0,00 €</strong></p>
-                                </div>
-                            </div>
-
-                            <div class="check check--pending" data-check="verwendung">
-                                <span class="check__dot"></span>
-                                <div>
-                                    <strong>Zeitnahe Mittelverwendung § 55 I Nr. 5</strong>
-                                    <p>Verwendung + zulässige Rücklagen müssen die zeitnah gebundenen Mittel decken.</p>
-                                    <p class="check__detail" data-detail="verwendung">Verbleibend: <strong>0,00
-                                            €</strong></p>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="csv-bar">
-                    <div class="csv-bar__info">
-                        <span class="csv-bar__label">CSV-Schnittstelle</span>
-                        <span class="csv-bar__hint">Zuflüsse, Verwendung und Rücklagen im- und exportieren</span>
-                    </div>
-                    <div class="csv-bar__actions">
-                        <button class="btn-ghost" type="button" data-csv-template="reserves">Vorlage laden</button>
-                        <label class="btn-ghost btn-ghost--file">
-                            Import
-                            <input type="file" accept=".csv,text/csv" data-csv-import="reserves" hidden />
-                        </label>
-                        <button class="btn-ghost" type="button" data-csv-export="reserves">Export</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============ 04 ZUWENDUNGSBESTÄTIGUNG ============ -->
-            <section class="panel" data-panel="donations">
-                <div class="panel__intro">
-                    <h2 class="panel__title">Zuwendungsbestätigung</h2>
-                    <p class="panel__lede">
-                        Generator nach amtlichem Muster (BMF-Vordruck). Ausfüllen und als Druckvorlage verwenden.
-                    </p>
-                </div>
-
-                <div class="donations-grid">
-                    <form class="donation-form" id="donation-form" onsubmit="return false;">
-                        <fieldset>
-                            <legend>Aussteller (Stiftung)</legend>
-                            <label>Name der Stiftung
-                                <input type="text" id="d-issuer-name" placeholder="z. B. Mustermann-Stiftung" />
-                            </label>
-                            <label>Anschrift
-                                <input type="text" id="d-issuer-addr" placeholder="Straße, PLZ, Ort" />
-                            </label>
-                            <label>Freistellungsbescheid v.
-                                <input type="text" id="d-fs-date" placeholder="TT.MM.JJJJ" />
-                            </label>
-                            <label>Finanzamt · Steuernummer
-                                <input type="text" id="d-fs-fa" placeholder="FA München · 143/456/78901" />
-                            </label>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Zuwendender</legend>
-                            <label>Name, Vorname / Firma
-                                <input type="text" id="d-donor-name" />
-                            </label>
-                            <label>Anschrift
-                                <input type="text" id="d-donor-addr" />
-                            </label>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Zuwendung</legend>
-                            <label>Betrag in EUR
-                                <input type="number" id="d-amount" step="0.01" placeholder="0,00" />
-                            </label>
-                            <label>Betrag in Worten
-                                <output id="d-amount-words">—</output>
-                            </label>
-                            <label>Tag der Zuwendung
-                                <input type="date" id="d-date" />
-                            </label>
-                            <label>Art der Zuwendung
-                                <select id="d-kind">
-                                    <option value="Geldzuwendung">Geldzuwendung</option>
-                                    <option value="Sachzuwendung">Sachzuwendung</option>
-                                    <option value="Aufwandsverzicht">Verzicht auf Erstattung von Aufwand</option>
-                                </select>
-                            </label>
-                            <label>Förderungszweck (steuerbegünstigt)
-                                <input type="text" id="d-purpose"
-                                    placeholder="z. B. Förderung von Bildung und Erziehung" />
-                            </label>
-                        </fieldset>
-
-                        <button class="btn-primary" type="button" id="btn-render-receipt">Bestätigung erzeugen</button>
-                    </form>
-
-                    <aside class="receipt" id="receipt-preview" aria-live="polite">
-                        <div class="receipt__header">
-                            <span>Bestätigung über Geldzuwendungen</span>
-                            <span>i. S. d. § 10b EStG</span>
-                        </div>
-                        <div class="receipt__body">
-                            <p class="receipt__placeholder">Formular ausfüllen und „Bestätigung erzeugen“ klicken.</p>
-                        </div>
-                    </aside>
-                </div>
-            </section>
-
-        </main>
-
-        <div class="csv-bar" style="margin-top: 48px;">
-            <div class="csv-bar__info">
-                <span class="csv-bar__label">Gesamt-Export</span>
-                <span class="csv-bar__hint">Konsolidierte Mandantenakte: alle Module als eine CSV</span>
+            <div class="row">
+                <label>Hebesatz (%)</label>
+                <input id="hebesatz" type="number" value="400" />
             </div>
-            <div class="csv-bar__actions">
-                <button class="btn-ghost" type="button" data-csv-export="all">Alle Daten exportieren</button>
-            </div>
-        </div>
 
-        <footer class="footnote">
-            <p>
-                Keine Steuerberatung · Berechnungen auf Basis VZ 2026 (Steueränderungsgesetz 2025) ·
-                Freigrenze § 64 III AO: 50.000 € · Freibetrag § 24 KStG: 5.000 € ·
-                Freibetrag § 11 GewStG: 5.000 € · Kleinunternehmer § 19 UStG: 25.000 / 100.000 € ·
-                Mittelverwendung § 55 I Nr. 5 AO: Freigrenze 100.000 €
-            </p>
-        </footer>
-    </div>
+            <button id="calc">Berechnen</button>
+
+            <div class="results">
+                <p>KSt + Soli: <strong id="kst"></strong></p>
+                <p>GewSt: <strong id="gewst"></strong></p>
+                <p>USt: <strong id="ust"></strong></p>
+                <p>Gesamt: <strong id="total"></strong></p>
+            </div>
+        </section>
+
+    </main>
 
     <script src="app.js"></script>
 </body>
