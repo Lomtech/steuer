@@ -20,12 +20,14 @@
                 <span class="masthead__mark">§</span>
                 <div>
                     <h1 class="masthead__title">Stiftungssteuer</h1>
-                    <p class="masthead__sub">Berechnungsmappe für gemeinnützige Stiftungen · VZ 2025</p>
+                    <p class="masthead__sub">Berechnungsmappe für gemeinnützige Stiftungen · VZ 2026</p>
                 </div>
             </div>
             <div class="masthead__meta">
+                <span class="save-indicator" id="save-indicator">Automatisch gespeichert</span>
                 <span class="badge">Kanzlei-Modul</span>
-                <button class="btn-ghost" id="btn-export-all" type="button">Ergebnis drucken</button>
+                <button class="btn-ghost" id="btn-export-all" type="button">Drucken</button>
+                <button class="btn-ghost" id="btn-reset-all" type="button">Zurücksetzen</button>
             </div>
         </header>
 
@@ -144,7 +146,7 @@
                         <h4>Freigrenze § 64 Abs. 3 AO</h4>
                         <p id="freigrenze-text">
                             Bruttoeinnahmen aus wGB: <strong data-freigrenze-value>0,00 €</strong>
-                            — Schwellenwert 45.000 €. Bitte Einnahmen erfassen.
+                            — Schwellenwert 50.000 €. Bitte Einnahmen erfassen.
                         </p>
                     </div>
                 </div>
@@ -281,7 +283,7 @@
                                 <span>Kleinunternehmer § 19 UStG anwenden</span>
                             </label>
                             <p class="switch__hint" id="kleinunternehmer-hint">
-                                Prüfung gegen 22.000 € (Vorjahr) / 50.000 € (laufend). Bei Aktivierung keine
+                                Prüfung gegen 25.000 € (Vorjahr) / 100.000 € (laufend). Bei Aktivierung keine
                                 USt-Erhebung.
                             </p>
                         </div>
@@ -500,9 +502,10 @@
 
         <footer class="footnote">
             <p>
-                Keine Steuerberatung · Berechnungen auf Basis VZ 2025 · Freigrenze § 64 III AO: 45.000 € ·
-                Freibetrag § 24 KStG: 5.000 € · Freibetrag § 11 GewStG: 5.000 € · Kleinunternehmer § 19 UStG: 22.000 /
-                50.000 €
+                Keine Steuerberatung · Berechnungen auf Basis VZ 2026 (Steueränderungsgesetz 2025) ·
+                Freigrenze § 64 III AO: 50.000 € · Freibetrag § 24 KStG: 5.000 € ·
+                Freibetrag § 11 GewStG: 5.000 € · Kleinunternehmer § 19 UStG: 25.000 / 100.000 € ·
+                Mittelverwendung § 55 I Nr. 5 AO: Freigrenze 100.000 €
             </p>
         </footer>
     </div>
